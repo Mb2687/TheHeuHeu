@@ -12,10 +12,11 @@
     <h1>The Heuheu</h1>
     <p>Dad jokes, puns & one-liners.</p>
     <nav>
-        <a href="index.html">Home</a>
+        <a href="index.html" class="active">Home</a>
+        <a href="about.html">About</a>
         <a href="dad-jokes.html">Dad Jokes</a>
         <a href="puns.html">Puns</a>
-        <a href="one-liners.html" class="active">One-Liners</a>
+        <a href="one-liners.html">One-Liners</a>
     </nav>
 </header>
 
@@ -67,5 +68,9 @@
 <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 </script>
+<footer>
+    <p>&copy; <span id="year"></span> The Heuheu. All rights reserved. 
+    | <a href="/privacy.html">Privacy Policy</a></p>
+</footer>
 </body>
 </html>
