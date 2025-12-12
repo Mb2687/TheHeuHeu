@@ -104,6 +104,7 @@ button:hover {
     background: #14141f;
     border-radius: 8px;
     padding: 1.2rem 1rem;
+    text-align: center;
 }
 
 .seo-section h2 {
