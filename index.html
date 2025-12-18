@@ -38,6 +38,149 @@
         </div>
     </section>
 
+    <section class="community-section" id="share-laughs" aria-labelledby="community-title">
+        <h2 id="community-title">Share a Joke &amp; Stay in the Loop</h2>
+        <p class="community-lede">
+            Help keep The HeuHeu inclusive by sharing original, PG-rated jokes. Skip personal names,
+            skip brands, and keep things light so we stay in line with AdSense and good vibes.
+        </p>
+        <div class="community-grid">
+            <article class="community-card" aria-labelledby="submit-title">
+                <h3 id="submit-title">Submit a Joke</h3>
+                <p class="community-note">Pick an alias, keep it kind, and double-check before sending. Every submission is reviewed before it goes live.</p>
+                <ul class="policy-list">
+                    <li>No personal names or call-outs.</li>
+                    <li>No company or product mentions.</li>
+                    <li>No profanity, hate, or adult themes.</li>
+                </ul>
+                <form id="joke-submission-form" class="community-form" novalidate>
+                    <div class="form-field">
+                        <label for="joke-alias">Alias (optional)</label>
+                        <input type="text" id="joke-alias" name="alias" maxlength="40" placeholder="PunMaster3000">
+                        <small>Alias shows up publicly if your joke is picked. Leave blank to stay Anonymous.</small>
+                    </div>
+                    <div class="form-field">
+                        <label for="joke-category">Joke style</label>
+                        <select id="joke-category" name="category">
+                            <option value="dad">Dad Joke</option>
+                            <option value="pun">Pun</option>
+                            <option value="one">One-Liner</option>
+                        </select>
+                    </div>
+                    <div class="form-field">
+                        <label for="joke-text">Your joke*</label>
+                        <textarea id="joke-text" name="joke" rows="4" maxlength="280" placeholder="Write a short joke that keeps it PG." required></textarea>
+                        <small>Keep it inclusive and under 280 characters.</small>
+                    </div>
+                    <label class="consent">
+                        <input type="checkbox" id="policy-check" required>
+                        I confirm this joke is original, safe for everyone, and follows these rules.
+                    </label>
+                    <button type="submit">Send it in</button>
+                    <p class="form-feedback" data-joke-feedback role="status" aria-live="polite"></p>
+                </form>
+            </article>
+
+            <article class="community-card" aria-labelledby="subscribe-title">
+                <h3 id="subscribe-title">Get New Jokes by Email</h3>
+                <p>Drop your email for a clean, occasional update when we add fresh laughs.</p>
+                <form id="subscription-form" class="community-form" novalidate>
+                    <div class="form-field">
+                        <label for="subscribe-alias">Alias (optional)</label>
+                        <input type="text" id="subscribe-alias" name="alias" maxlength="40" placeholder="LaughSeeker">
+                    </div>
+                    <div class="form-field">
+                        <label for="subscribe-email">Email*</label>
+                        <input type="email" id="subscribe-email" name="email" placeholder="you@example.com" required>
+                    </div>
+                    <label class="consent">
+                        <input type="checkbox" id="subscribe-consent" required>
+                        I agree to receive occasional joke updates. No spam, unsubscribe anytime.
+                    </label>
+                    <button type="submit">Notify me</button>
+                    <p class="form-feedback" data-subscribe-feedback role="status" aria-live="polite"></p>
+                </form>
+            </article>
+
+            <article class="community-card complaint-card" aria-labelledby="complaint-title">
+                <h3 id="complaint-title">Report a Problem</h3>
+                <p class="community-note">If a joke feels off, let us know and we’ll review it quickly.</p>
+                <form id="complaint-form" class="community-form" novalidate>
+                    <div class="form-field">
+                        <label for="complaint-alias">Alias or Display Name (optional)</label>
+                        <input type="text" id="complaint-alias" maxlength="60" placeholder="HelpfulHuman">
+                    </div>
+                    <div class="form-field">
+                        <label for="complaint-email">Contact Email (optional)</label>
+                        <input type="email" id="complaint-email" placeholder="you@example.com">
+                    </div>
+                    <div class="form-field">
+                        <label for="complaint-reference">Joke Reference*</label>
+                        <input type="text" id="complaint-reference" maxlength="200" placeholder="Quote part of the joke or alias you saw" required>
+                        <small>Include the alias and a short snippet so we can find it.</small>
+                    </div>
+                    <div class="form-field">
+                        <label for="complaint-reason">Why should it be reviewed?*</label>
+                        <textarea id="complaint-reason" rows="4" maxlength="400" placeholder="Explain why it should be removed (hate speech, offensive, etc.)" required></textarea>
+                    </div>
+                    <label class="consent">
+                        <input type="checkbox" id="complaint-check" required>
+                        I understand this form is for reporting offensive or policy-breaking content.
+                    </label>
+                    <button type="submit">Submit Complaint</button>
+                    <p class="form-feedback" data-complaint-feedback role="status" aria-live="polite"></p>
+                </form>
+            </article>
+
+            <article class="community-card admin-access-card" aria-labelledby="admin-access-title">
+                <h3 id="admin-access-title">Admin Tools</h3>
+                <p class="community-note">
+                    Only The HeuHeu team can review, approve, delete jokes, and handle complaints. Confirm using the admin email.
+                </p>
+                <form id="admin-access-form" class="community-form" novalidate>
+                    <div class="form-field">
+                        <label for="admin-email">Admin Email</label>
+                        <input type="email" id="admin-email" placeholder="theheuheu@gmail.com" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="admin-code">Access Code</label>
+                        <input type="password" id="admin-code" placeholder="Enter admin code" required>
+                        <small>Need help? Check the admin inbox to confirm the latest code.</small>
+                    </div>
+                    <button type="submit">Unlock Admin Mode</button>
+                </form>
+                <p class="admin-status" data-admin-status>Admin mode is locked.</p>
+                <button type="button" class="admin-signout" data-admin-signout hidden>Sign out</button>
+            </article>
+
+            <article class="community-card review-card admin-only" aria-labelledby="review-title">
+                <h3 id="review-title">Review Queue</h3>
+                <p class="community-note">New submissions stay here until you approve or reject them.</p>
+                <div class="review-empty" data-review-empty>
+                    Nothing pending yet. Approved jokes will show up once you add them.
+                </div>
+                <ul class="review-list" data-review-list aria-live="polite" aria-label="Pending joke submissions"></ul>
+                <p class="review-hint">Only approved jokes move to the site and email list.</p>
+            </article>
+        </div>
+
+        <section class="community-card approved-card admin-only" aria-labelledby="approved-title">
+            <h3 id="approved-title">Community-Approved Laughs</h3>
+            <p class="community-note">
+                Each entry shows when it was added (MMM YYYY) and the alias provided. Alias defaults to Anonymous.
+            </p>
+            <div data-approved-empty class="review-empty">No community jokes yet—approve one to see it here.</div>
+            <ul class="approved-list" data-approved-list></ul>
+        </section>
+
+        <section class="community-card admin-only" aria-labelledby="complaint-review-title">
+            <h3 id="complaint-review-title">Complaint Desk</h3>
+            <p class="community-note">Review reports, resolve them, or delete the flagged content.</p>
+            <div class="review-empty" data-complaints-empty>No complaints at the moment.</div>
+            <ul class="complaint-list" data-complaint-list aria-live="polite"></ul>
+        </section>
+    </section>
+
     <section class="seo-section">
         <h2>About HeuHeu Jokes</h2>
         <p>

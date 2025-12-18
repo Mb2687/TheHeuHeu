@@ -234,6 +234,236 @@
         one: 'One-Liners'
     };
 
+    const submissionTypeLabels = {
+        dad: 'dad joke',
+        pun: 'pun',
+        one: 'one-liner'
+    };
+
+    const getSubmissionLabel = (type = 'dad') => submissionTypeLabels[type] || 'joke';
+
+    const storageKeys = {
+        pending: 'heuheuPendingSubmissions',
+        approved: 'heuheuApprovedJokes',
+        complaints: 'heuheuJokeComplaints'
+    };
+
+    const submissionState = {
+        pending: [],
+        approved: [],
+        complaints: []
+    };
+
+    const adminConfig = {
+        email: 'theheuheu@gmail.com',
+        code: 'heuheu-review'
+    };
+
+    const adminState = {
+        active: false
+    };
+
+    const contentPolicy = {
+        blockedWords: [
+            'explicit',
+            'violent',
+            'violence',
+            'weapon',
+            'hate',
+            'gambling',
+            'casino',
+            'bet',
+            'drugs',
+            'drug',
+            'nsfw',
+            'adult',
+            'politics',
+            'weaponry',
+            'blood',
+            'gore',
+            'injury',
+            'threat'
+        ],
+        blockedBrands: [
+            'nike',
+            'adidas',
+            'apple',
+            'google',
+            'microsoft',
+            'amazon',
+            'meta',
+            'facebook',
+            'instagram',
+            'twitter',
+            'tesla',
+            'reddit',
+            'netflix',
+            'youtube',
+            'coke',
+            'coca',
+            'cola',
+            'pepsi',
+            'uber',
+            'lyft',
+            'disney',
+            'spotify'
+        ],
+        blockedNames: [
+            'john',
+            'michael',
+            'sarah',
+            'david',
+            'jessica',
+            'matt',
+            'emily',
+            'james',
+            'linda',
+            'robert',
+            'jennifer',
+            'thomas',
+            'chris',
+            'karen',
+            'brian',
+            'olivia',
+            'daniel',
+            'noah',
+            'emma',
+            'liam'
+        ]
+    };
+
+    const sanitizeInput = (value = '') => value.trim();
+
+    const tokenize = (value = '') => value.toLowerCase().match(/[a-z0-9]+/g) || [];
+
+    const findPolicyMatches = (value, terms) => {
+        const normalized = value.toLowerCase();
+        const tokenSet = new Set(tokenize(value));
+        return terms.filter((term) => (term.includes(' ') || term.includes('-'))
+            ? normalized.includes(term)
+            : tokenSet.has(term));
+    };
+
+    const containsUrl = (value = '') => /(https?:\/\/|www\.)/i.test(value);
+
+    const isEmailValid = (email = '') => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
+
+    const evaluatePolicy = (alias = '', content = '') => {
+        const scope = `${alias} ${content}`.trim();
+        const flags = [];
+
+        const blockedWordHits = findPolicyMatches(scope, contentPolicy.blockedWords);
+        if (blockedWordHits.length) {
+            flags.push(`Please remove sensitive words: ${blockedWordHits.join(', ')}.`);
+        }
+
+        const brandHits = findPolicyMatches(scope, contentPolicy.blockedBrands);
+        if (brandHits.length) {
+            flags.push(`No brand call-outs please (spotted: ${brandHits.join(', ')}).`);
+        }
+
+        const nameHits = findPolicyMatches(scope, contentPolicy.blockedNames);
+        if (nameHits.length) {
+            flags.push(`Swap personal names like ${nameHits.join(', ')} for neutral characters.`);
+        }
+
+        if (containsUrl(scope)) {
+            flags.push('Links and URLs are not allowed.');
+        }
+
+        return flags;
+    };
+
+    const loadListFromStorage = (key) => {
+        if (typeof window === 'undefined' || !window.localStorage) {
+            return [];
+        }
+
+        try {
+            const stored = window.localStorage.getItem(key);
+            if (!stored) {
+                return [];
+            }
+
+            const parsed = JSON.parse(stored);
+            return Array.isArray(parsed) ? parsed : [];
+        } catch (error) {
+            console.warn('Unable to read stored data', error);
+            return [];
+        }
+    };
+
+    const persistList = (key, list) => {
+        if (typeof window === 'undefined' || !window.localStorage) {
+            return;
+        }
+
+        try {
+            window.localStorage.setItem(key, JSON.stringify(list));
+        } catch (error) {
+            console.warn('Unable to persist data', error);
+        }
+    };
+
+    const initializeSubmissionState = () => {
+        submissionState.pending = loadListFromStorage(storageKeys.pending);
+        submissionState.approved = loadListFromStorage(storageKeys.approved);
+        submissionState.complaints = loadListFromStorage(storageKeys.complaints);
+    };
+
+    const savePendingState = () => persistList(storageKeys.pending, submissionState.pending);
+    const saveApprovedState = () => persistList(storageKeys.approved, submissionState.approved);
+    const saveComplaintState = () => persistList(storageKeys.complaints, submissionState.complaints);
+
+    const getApprovedJokesByType = (type = 'mixed') => {
+        if (type && type !== 'mixed') {
+            return submissionState.approved
+                .filter((entry) => entry.category === type)
+                .map((entry) => entry.text);
+        }
+
+        return submissionState.approved.map((entry) => entry.text);
+    };
+
+    const getDisplayAlias = (alias = '') => alias || 'Anonymous';
+
+    const formatMonthYearLabel = (value) => {
+        if (!value) {
+            return 'Unknown';
+        }
+
+        return new Date(value).toLocaleString('en-US', {
+            month: 'short',
+            year: 'numeric'
+        });
+    };
+
+    const formatFullDateLabel = (value) => {
+        if (!value) {
+            return '';
+        }
+
+        return new Date(value).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+    };
+
+    const setFeedback = (node, message, state = 'neutral') => {
+        if (!node) {
+            return;
+        }
+
+        if (state === 'neutral') {
+            node.removeAttribute('data-state');
+        } else {
+            node.dataset.state = state;
+        }
+
+        node.textContent = message;
+    };
+
     const archiveState = {
         type: 'mixed',
         month: 'all',
@@ -280,11 +510,12 @@
     const allJokes = Object.values(compiledTypeJokes).flat();
 
     const getJokesByType = (type = 'mixed') => {
+        const approvedAdditions = getApprovedJokesByType(type);
         if (!type || type === 'mixed' || !compiledTypeJokes[type]) {
-            return allJokes;
+            return allJokes.concat(approvedAdditions);
         }
 
-        return compiledTypeJokes[type];
+        return compiledTypeJokes[type].concat(approvedAdditions);
     };
 
     const getReadableLabel = (type = 'mixed') => typeLabels[type] || 'All Jokes';
@@ -558,6 +789,526 @@
         renderJokeArchive();
     };
 
+    const setAdminMode = (active) => {
+        adminState.active = active;
+        if (active) {
+            document.body.dataset.admin = 'true';
+        } else {
+            delete document.body.dataset.admin;
+        }
+
+        const statusNode = document.querySelector('[data-admin-status]');
+        if (statusNode) {
+            statusNode.textContent = active
+                ? 'Admin mode unlocked. Moderation tools are visible.'
+                : 'Admin mode is locked.';
+        }
+
+        const signOutButton = document.querySelector('[data-admin-signout]');
+        if (signOutButton) {
+            signOutButton.hidden = !active;
+        }
+
+        if (active) {
+            renderReviewQueue();
+            renderApprovedJokes();
+            renderComplaintDashboard();
+        }
+    };
+
+    const deleteApprovedJoke = (id) => {
+        const index = submissionState.approved.findIndex((entry) => entry.id === id);
+        if (index === -1) {
+            return false;
+        }
+
+        submissionState.approved.splice(index, 1);
+        saveApprovedState();
+        renderApprovedJokes();
+        return true;
+    };
+
+    const deleteApprovedJokeByText = (snippet) => {
+        if (!snippet) {
+            return false;
+        }
+
+        const normalized = snippet.toLowerCase();
+        const entry = submissionState.approved.find((item) => item.text.toLowerCase().includes(normalized));
+        return entry ? deleteApprovedJoke(entry.id) : false;
+    };
+
+    const renderReviewQueue = () => {
+        const list = document.querySelector('[data-review-list]');
+        const emptyState = document.querySelector('[data-review-empty]');
+
+        if (!list || !emptyState) {
+            return;
+        }
+
+        list.innerHTML = '';
+        const pending = submissionState.pending
+            .slice()
+            .sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+
+        if (!pending.length) {
+            emptyState.hidden = false;
+            return;
+        }
+
+        emptyState.hidden = true;
+
+        pending.forEach((entry) => {
+            const item = document.createElement('li');
+            item.className = 'review-item';
+
+            const header = document.createElement('div');
+            header.className = 'review-header';
+
+            const aliasLabel = document.createElement('span');
+            const typeLabel = getReadableLabel(entry.category);
+            aliasLabel.textContent = `${getDisplayAlias(entry.alias)} • ${typeLabel}`;
+
+            const dateLabel = document.createElement('span');
+            dateLabel.textContent = formatFullDateLabel(entry.submittedAt);
+
+            header.append(aliasLabel, dateLabel);
+
+            const text = document.createElement('p');
+            text.className = 'review-text';
+            text.textContent = entry.text;
+
+            const actions = document.createElement('div');
+            actions.className = 'review-actions';
+
+            const approveButton = document.createElement('button');
+            approveButton.type = 'button';
+            approveButton.textContent = 'Approve';
+            approveButton.addEventListener('click', () => approvePendingSubmission(entry.id));
+
+            const rejectButton = document.createElement('button');
+            rejectButton.type = 'button';
+            rejectButton.textContent = 'Reject';
+            rejectButton.classList.add('reject');
+            rejectButton.addEventListener('click', () => rejectPendingSubmission(entry.id));
+
+            actions.append(approveButton, rejectButton);
+
+            item.append(header, text, actions);
+            list.appendChild(item);
+        });
+    };
+
+    const renderApprovedJokes = () => {
+        const list = document.querySelector('[data-approved-list]');
+        const emptyState = document.querySelector('[data-approved-empty]');
+
+        if (!list || !emptyState) {
+            return;
+        }
+
+        list.innerHTML = '';
+        const approvedEntries = submissionState.approved
+            .slice()
+            .sort((a, b) => new Date(b.approvedAt || b.submittedAt) - new Date(a.approvedAt || a.submittedAt));
+
+        if (!approvedEntries.length) {
+            emptyState.hidden = false;
+            return;
+        }
+
+        emptyState.hidden = true;
+
+        approvedEntries.forEach((entry) => {
+            const item = document.createElement('li');
+            item.className = 'approved-item';
+
+            const meta = document.createElement('div');
+            meta.className = 'approved-meta';
+
+            const primaryLabel = document.createElement('span');
+            primaryLabel.textContent = `${formatMonthYearLabel(entry.approvedAt || entry.submittedAt)} • ${getDisplayAlias(entry.alias)}`;
+
+            const typeLabel = document.createElement('span');
+            typeLabel.textContent = getReadableLabel(entry.category);
+
+            meta.append(primaryLabel, typeLabel);
+
+            const text = document.createElement('p');
+            text.className = 'approved-text';
+            text.textContent = entry.text;
+
+            item.append(meta, text);
+
+            if (adminState.active) {
+                const actions = document.createElement('div');
+                actions.className = 'approved-actions';
+                const deleteButton = document.createElement('button');
+                deleteButton.type = 'button';
+                deleteButton.textContent = 'Delete joke';
+                deleteButton.classList.add('reject');
+                deleteButton.addEventListener('click', () => deleteApprovedJoke(entry.id));
+                actions.appendChild(deleteButton);
+                item.appendChild(actions);
+            }
+
+            list.appendChild(item);
+        });
+    };
+
+    const queuePendingSubmission = (entry) => {
+        submissionState.pending.unshift(entry);
+        savePendingState();
+        renderReviewQueue();
+    };
+
+    const approvePendingSubmission = (id) => {
+        const index = submissionState.pending.findIndex((entry) => entry.id === id);
+        if (index === -1) {
+            return;
+        }
+
+        const [entry] = submissionState.pending.splice(index, 1);
+        entry.approvedAt = new Date().toISOString();
+        submissionState.approved.unshift(entry);
+        savePendingState();
+        saveApprovedState();
+        renderReviewQueue();
+        renderApprovedJokes();
+    };
+
+    const rejectPendingSubmission = (id) => {
+        const index = submissionState.pending.findIndex((entry) => entry.id === id);
+        if (index === -1) {
+            return;
+        }
+
+        submissionState.pending.splice(index, 1);
+        savePendingState();
+        renderReviewQueue();
+    };
+
+    const renderComplaintDashboard = () => {
+        const list = document.querySelector('[data-complaint-list]');
+        const emptyState = document.querySelector('[data-complaints-empty]');
+
+        if (!list || !emptyState) {
+            return;
+        }
+
+        list.innerHTML = '';
+        const complaints = submissionState.complaints
+            .slice()
+            .sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+
+        if (!complaints.length) {
+            emptyState.hidden = false;
+            return;
+        }
+
+        emptyState.hidden = true;
+
+        complaints.forEach((complaint) => {
+            const item = document.createElement('li');
+            item.className = 'complaint-item';
+
+            const meta = document.createElement('div');
+            meta.className = 'complaint-meta';
+            const reporter = complaint.alias ? complaint.alias : 'Anonymous';
+            const metaLeft = document.createElement('span');
+            metaLeft.textContent = `${reporter} • ${complaint.email || 'no email provided'}`;
+
+            const metaRight = document.createElement('span');
+            metaRight.textContent = `${formatFullDateLabel(complaint.submittedAt)} • ${complaint.status}`;
+            meta.append(metaLeft, metaRight);
+
+            const reference = document.createElement('p');
+            reference.className = 'complaint-text';
+            const referenceLabel = document.createElement('strong');
+            referenceLabel.textContent = 'Reference:';
+            reference.append(referenceLabel, document.createTextNode(` ${complaint.reference}`));
+
+            const reason = document.createElement('p');
+            reason.className = 'complaint-text';
+            const reasonLabel = document.createElement('strong');
+            reasonLabel.textContent = 'Reason:';
+            reason.append(reasonLabel, document.createTextNode(` ${complaint.reason}`));
+
+            const actions = document.createElement('div');
+            actions.className = 'complaint-actions';
+
+            const resolveButton = document.createElement('button');
+            resolveButton.type = 'button';
+            resolveButton.textContent = complaint.status === 'resolved' ? 'Resolved' : 'Mark Resolved';
+            resolveButton.disabled = complaint.status === 'resolved';
+            resolveButton.addEventListener('click', () => resolveComplaint(complaint.id));
+
+            const deleteJokeButton = document.createElement('button');
+            deleteJokeButton.type = 'button';
+            deleteJokeButton.textContent = 'Delete flagged joke';
+            deleteJokeButton.classList.add('secondary');
+            deleteJokeButton.addEventListener('click', () => {
+                const removed = deleteApprovedJokeByText(complaint.reference);
+                if (!removed) {
+                    alert('No joke matched that reference. Remove manually if needed.');
+                } else {
+                    resolveComplaint(complaint.id);
+                }
+            });
+
+            const removeComplaintButton = document.createElement('button');
+            removeComplaintButton.type = 'button';
+            removeComplaintButton.textContent = 'Remove complaint';
+            removeComplaintButton.classList.add('secondary');
+            removeComplaintButton.addEventListener('click', () => removeComplaint(complaint.id));
+
+            actions.append(resolveButton, deleteJokeButton, removeComplaintButton);
+
+            item.append(meta, reference, reason, actions);
+            list.appendChild(item);
+        });
+    };
+
+    const queueComplaint = (entry) => {
+        submissionState.complaints.unshift(entry);
+        saveComplaintState();
+        renderComplaintDashboard();
+    };
+
+    const resolveComplaint = (id) => {
+        const entry = submissionState.complaints.find((complaint) => complaint.id === id);
+        if (!entry) {
+            return;
+        }
+        entry.status = 'resolved';
+        saveComplaintState();
+        renderComplaintDashboard();
+    };
+
+    const removeComplaint = (id) => {
+        const index = submissionState.complaints.findIndex((complaint) => complaint.id === id);
+        if (index === -1) {
+            return;
+        }
+        submissionState.complaints.splice(index, 1);
+        saveComplaintState();
+        renderComplaintDashboard();
+    };
+
+    const initComplaintForm = () => {
+        const form = document.getElementById('complaint-form');
+        if (!form) {
+            return;
+        }
+
+        const aliasInput = form.querySelector('#complaint-alias');
+        const emailInput = form.querySelector('#complaint-email');
+        const referenceInput = form.querySelector('#complaint-reference');
+        const reasonInput = form.querySelector('#complaint-reason');
+        const confirmCheckbox = form.querySelector('#complaint-check');
+        const feedback = form.querySelector('[data-complaint-feedback]');
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const alias = sanitizeInput(aliasInput?.value || '');
+            const email = sanitizeInput(emailInput?.value || '');
+            const reference = sanitizeInput(referenceInput?.value || '');
+            const reason = sanitizeInput(reasonInput?.value || '');
+            const confirmed = confirmCheckbox ? confirmCheckbox.checked : false;
+            const errors = [];
+
+            if (!reference || reference.length < 5) {
+                errors.push('Please include enough of the joke text so we can locate it.');
+            }
+
+            if (!reason || reason.length < 15) {
+                errors.push('Please explain why the joke should be reviewed (at least 15 characters).');
+            }
+
+            if (!confirmed) {
+                errors.push('Please confirm the complaint is for offensive or policy-breaking content.');
+            }
+
+            if (email && !isEmailValid(email)) {
+                errors.push('Please enter a valid email so we can follow up.');
+            }
+
+            if (errors.length) {
+                setFeedback(feedback, errors[0], 'error');
+                return;
+            }
+
+            const entry = {
+                id: `complaint-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+                alias,
+                email,
+                reference,
+                reason,
+                status: 'open',
+                submittedAt: new Date().toISOString()
+            };
+
+            queueComplaint(entry);
+            setFeedback(feedback, 'Thanks for the report—our team will review it shortly.', 'success');
+            form.reset();
+        });
+    };
+
+    const initAdminAccess = () => {
+        const form = document.getElementById('admin-access-form');
+        if (!form) {
+            return;
+        }
+
+        const emailInput = form.querySelector('#admin-email');
+        const codeInput = form.querySelector('#admin-code');
+        const statusNode = document.querySelector('[data-admin-status]');
+        const signOutButton = document.querySelector('[data-admin-signout]');
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const email = sanitizeInput(emailInput?.value || '').toLowerCase();
+            const code = sanitizeInput(codeInput?.value || '');
+
+            if (email !== adminConfig.email || code !== adminConfig.code) {
+                if (statusNode) {
+                    statusNode.textContent = 'Access denied. Please verify the admin email/code.';
+                }
+                return;
+            }
+
+            setAdminMode(true);
+            form.reset();
+        });
+
+        if (signOutButton) {
+            signOutButton.addEventListener('click', () => {
+                setAdminMode(false);
+            });
+        }
+    };
+
+    const initJokeSubmission = () => {
+        const form = document.getElementById('joke-submission-form');
+        if (!form) {
+            return;
+        }
+
+        const aliasInput = form.querySelector('#joke-alias');
+        const jokeInput = form.querySelector('#joke-text');
+        const categoryInput = form.querySelector('#joke-category');
+        const policyCheckbox = form.querySelector('#policy-check');
+        const feedback = form.querySelector('[data-joke-feedback]');
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const rawAlias = sanitizeInput(aliasInput?.value || '');
+            const alias = rawAlias || 'Anonymous';
+            const joke = sanitizeInput(jokeInput?.value || '');
+            const categoryInputValue = sanitizeInput(categoryInput?.value || 'dad').toLowerCase();
+            const category = submissionTypeLabels[categoryInputValue] ? categoryInputValue : 'dad';
+            const agreed = policyCheckbox ? policyCheckbox.checked : false;
+            const errors = [];
+
+            if (rawAlias && rawAlias.length < 3) {
+                errors.push('Pick an alias with at least 3 characters (no personal names).');
+            }
+
+            if (joke.length < 12) {
+                errors.push('Give us at least a sentence so the joke lands.');
+            }
+
+            if (!agreed) {
+                errors.push('Please confirm the content policy checkbox.');
+            }
+
+            const policyIssues = evaluatePolicy(rawAlias, joke);
+            if (policyIssues.length) {
+                errors.push(policyIssues[0]);
+            }
+
+            if (errors.length) {
+                setFeedback(feedback, errors[0], 'error');
+                return;
+            }
+
+            const submission = {
+                id: `submission-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+                alias,
+                category,
+                text: joke,
+                submittedAt: new Date().toISOString()
+            };
+
+            queuePendingSubmission(submission);
+
+            const preview = joke.length > 120 ? `${joke.slice(0, 120)}…` : joke;
+            setFeedback(
+                feedback,
+                `Thanks, ${alias}! Your ${getSubmissionLabel(category)} is in the review queue: "${preview}"`,
+                'success'
+            );
+            form.reset();
+        });
+    };
+
+    const initEmailSubscription = () => {
+        const form = document.getElementById('subscription-form');
+        if (!form) {
+            return;
+        }
+
+        const aliasInput = form.querySelector('#subscribe-alias');
+        const emailInput = form.querySelector('#subscribe-email');
+        const consentCheckbox = form.querySelector('#subscribe-consent');
+        const feedback = form.querySelector('[data-subscribe-feedback]');
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const alias = sanitizeInput(aliasInput?.value || '');
+            const email = sanitizeInput(emailInput?.value || '');
+            const agreed = consentCheckbox ? consentCheckbox.checked : false;
+            const errors = [];
+
+            if (!email) {
+                errors.push('Email is required so we know where to send updates.');
+            } else if (!isEmailValid(email)) {
+                errors.push('Please enter a valid email address.');
+            }
+
+            if (!agreed) {
+                errors.push('Please agree to receive the occasional joke drop.');
+            }
+
+            if (alias && alias.length < 3) {
+                errors.push('Aliases should be at least 3 characters.');
+            }
+
+            if (alias) {
+                const aliasIssues = evaluatePolicy(alias, '');
+                if (aliasIssues.length) {
+                    errors.push(aliasIssues[0]);
+                }
+            }
+
+            if (errors.length) {
+                setFeedback(feedback, errors[0], 'error');
+                return;
+            }
+
+            const displayName = alias || 'friend';
+            setFeedback(
+                feedback,
+                `Great! ${displayName}, we’ll send fresh jokes to ${email} when new drops go live.`,
+                'success'
+            );
+            form.reset();
+        });
+    };
+
     const setCurrentYear = () => {
         const year = new Date().getFullYear();
         document.querySelectorAll('[data-year]').forEach((node) => {
@@ -582,11 +1333,19 @@
     };
 
     document.addEventListener('DOMContentLoaded', () => {
+        initializeSubmissionState();
+        renderReviewQueue();
+        renderApprovedJokes();
+        renderComplaintDashboard();
         setCurrentYear();
         highlightActiveNav();
         initRandomJokeButtons();
         renderStandaloneJokePages();
         initStandaloneJokeSearch();
         initArchiveControls();
+        initAdminAccess();
+        initComplaintForm();
+        initJokeSubmission();
+        initEmailSubscription();
     });
 })();
