@@ -24,14 +24,26 @@ document.getElementById("loginBtn").onclick = async () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  await signInWithEmailAndPassword(auth, email, password);
-  alert("Admin authenticated");
+  try {
+    // Surface auth errors so admins know why login failed.
+    await signInWithEmailAndPassword(auth, email, password);
+    alert("Admin authenticated");
+  } catch (error) {
+    alert(error.message || "Failed to authenticate");
+  }
 };
 
 // 🧠 Send moderation action
 window.sendModeration = async (jokeId, action) => {
   try {
-    const token = await auth.currentUser.getIdToken();
+    // Guard against null user before attempting any admin action.
+    if (!auth.currentUser) {
+      alert("Please log in again before performing admin actions.");
+      return;
+    }
+
+    // Force-refresh the JWT to avoid stale or revoked tokens.
+    const token = await auth.currentUser.getIdToken(true);
 
     const res = await fetch(
       "https://heu-admin-api.michael-bonafede87.workers.dev/moderate",
@@ -46,9 +58,14 @@ window.sendModeration = async (jokeId, action) => {
     );
 
     if (!res.ok) {
+      // Bubble up Worker responses so admins know why the call failed.
       if (res.status === 401) alert("Not authenticated");
-      if (res.status === 403) alert("Not authorized");
-      throw new Error(`Server error ${res.status}`);
+      else if (res.status === 403) alert("Not authorized");
+      else {
+        const errorBody = await res.text();
+        throw new Error(errorBody || `Server error ${res.status}`);
+      }
+      return;
     }
 
     const data = await res.json();
@@ -56,7 +73,7 @@ window.sendModeration = async (jokeId, action) => {
 
   } catch (err) {
     console.error(err);
-    alert("Failed to submit moderation");
+    alert(err.message || "Failed to submit moderation");
   }
 };
 
