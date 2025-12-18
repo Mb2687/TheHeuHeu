@@ -2,25 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>The Heuheu</title>
-    <meta name="description" content="A list of classic dad jokes for quick laughs. Scroll through cheesy one-liners and dad-level puns.">
+    <title>The Heuheu – Dad Jokes</title>
+    <meta name="description" content="Classic dad jokes for quick laughs. Scroll through cheesy one-liners and dad-level puns.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/styles.css">
+    <script src="js/jokes.js" defer></script>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to content</a>
 <header>
+    <img class="heuheu" src="Photos/heuheu.jpeg" alt="Heuheu mascot" loading="lazy" width="150" height="150">
     <h1>The Heuheu</h1>
-    <p>Dad jokes, puns & one-liners.</p>
-    <nav>
-        <a href="index.html" class="active">Home</a>
+    <p>Dad jokes, puns &amp; one-liners.</p>
+    <nav aria-label="Primary">
+        <a href="index.html">Home</a>
         <a href="about.html">About</a>
-        <a href="dad-jokes.html">Dad Jokes</a>
+        <a href="dad-jokes.html" class="active">Dad Jokes</a>
         <a href="puns.html">Puns</a>
         <a href="one-liners.html">One-Liners</a>
+        <a href="archive.html">Archive</a>
     </nav>
 </header>
 
-<main class="joke-list-page">
+<main id="main-content" class="joke-list-page">
     <h1>Dad Jokes</h1>
     <p class="intro">
         These are classic dad jokes: cheesy, groan-worthy, and perfect for family chats, awkward small talk,
@@ -61,12 +65,8 @@
 </main>
 
 <footer>
-    <p>&copy; <span id="year"></span> The HeuHeu. All rights reserved. 
-    | <a href="/privacy.html">Privacy Policy</a></p>
+    <p>&copy; <span data-year></span> The HeuHeu. All rights reserved.
+    | <a href="privacy.html">Privacy Policy</a></p>
 </footer>
-
-<script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-</script>
 </body>
 </html>

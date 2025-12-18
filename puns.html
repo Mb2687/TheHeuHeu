@@ -2,25 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>The Heuheu - Puns</title>
+    <title>The Heuheu – Puns</title>
     <meta name="description" content="A list of silly, groan-worthy puns. Great for captions, intros, and bad humor with friends.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/styles.css">
+    <script src="js/jokes.js" defer></script>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to content</a>
 <header>
+    <img class="heuheu" src="Photos/heuheu.jpeg" alt="Heuheu mascot" loading="lazy" width="150" height="150">
     <h1>The Heuheu</h1>
-    <p>Dad jokes, puns & one-liners.</p>
-    <nav>
-        <a href="index.html" class="active">Home</a>
+    <p>Dad jokes, puns &amp; one-liners.</p>
+    <nav aria-label="Primary">
+        <a href="index.html">Home</a>
         <a href="about.html">About</a>
         <a href="dad-jokes.html">Dad Jokes</a>
-        <a href="puns.html">Puns</a>
+        <a href="puns.html" class="active">Puns</a>
         <a href="one-liners.html">One-Liners</a>
+        <a href="archive.html">Archive</a>
     </nav>
 </header>
 
-<main class="joke-list-page">
+<main id="main-content" class="joke-list-page">
     <h1>Puns</h1>
     <p class="intro">
         Puns are wordplay at its most dangerous: they make people laugh and groan at the same time.
@@ -61,11 +65,8 @@
 </main>
 
 <footer>
-    <p>&copy; <span id="year"></span> HeuHeu Jokes. All rights reserved.</p>
+    <p>&copy; <span data-year></span> The HeuHeu. All rights reserved.
+    | <a href="privacy.html">Privacy Policy</a></p>
 </footer>
-
-<script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-</script>
 </body>
 </html>

@@ -2,35 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>The Heuheu</title>
+    <title>The Heuheu – Random Dad Jokes, Puns &amp; One-Liners</title>
     <meta name="description" content="Get a random dad joke, pun, or one-liner with one click. Simple, clean joke site for quick laughs.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/styles.css">
+    <script src="js/jokes.js" defer></script>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to content</a>
 <header>
+    <img class="heuheu" src="Photos/heuheu.jpeg" alt="Heuheu mascot" loading="lazy" width="150" height="150"/>
     <h1>The Heuheu</h1>
-    <p>Random dad jokes, puns & one-liners with one click.</p>
-    <nav>
+    <p>Random dad jokes, puns &amp; one-liners with one click.</p>
+    <nav aria-label="Primary">
         <a href="index.html" class="active">Home</a>
         <a href="about.html">About</a>
         <a href="dad-jokes.html">Dad Jokes</a>
         <a href="puns.html">Puns</a>
         <a href="one-liners.html">One-Liners</a>
+        <a href="archive.html">Archive</a>
     </nav>
-
-    <img class="heuheu" src="Photos/heuheu.jpeg"/>
 </header>
 
-<main>
+<main id="main-content">
     <section class="hero">
         <h2>Click for a random joke</h2>
-        <div id="joke-box">Press the button to get a joke.</div>
+        <div id="joke-box" role="status" aria-live="polite">Press a button to get a joke.</div>
         <div class="buttons">
-            <button onclick="showRandomJoke('mixed')">Random (Any)</button>
-            <button onclick="showRandomJoke('dad')">Dad Joke</button>
-            <button onclick="showRandomJoke('pun')">Pun</button>
-            <button onclick="showRandomJoke('one')">One-Liner</button>
+            <button type="button" data-joke-button="mixed">Random (Any)</button>
+            <button type="button" data-joke-button="dad">Dad Joke</button>
+            <button type="button" data-joke-button="pun">Pun</button>
+            <button type="button" data-joke-button="one">One-Liner</button>
         </div>
     </section>
 
@@ -48,15 +50,10 @@
 </main>
 
 <footer>
-    <p>&copy; <span id="year"></span> The HeuHeu. All rights reserved. 
-    | <a href="/privacy.html">Privacy Policy</a></p>
+    <p>&copy; <span data-year></span> The HeuHeu. All rights reserved. 
+    | <a href="privacy.html">Privacy Policy</a></p>
 
     <!-- TODO: Insert your AdSense code here once approved -->
 </footer>
-
-<script src="js/jokes.js"></script>
-<script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-</script>
 </body>
 </html>

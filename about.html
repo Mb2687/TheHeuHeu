@@ -3,40 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="./css/styles.css"/>
+    <title>About The HeuHeu – Why This Joke Site Exists</title>
+    <meta name="description" content="Learn more about The HeuHeu: a fast-loading joke site with curated dad jokes, puns, and one-liners for instant laughs.">
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="js/jokes.js" defer></script>
 </head>
 <body>
-    
+<a class="skip-link" href="#main-content">Skip to content</a>
 <header>
+    <img class="heuheu" src="Photos/heuheu.jpeg" alt="Heuheu mascot" loading="lazy" width="150" height="150">
     <h1>The Heuheu</h1>
-    <p>Random dad jokes, puns & one-liners with one click.</p>
-    <nav>
-        <a href="index.html" class="active">Home</a>
-        <a href="about.html">About</a>
+    <p>Random dad jokes, puns &amp; one-liners with one click.</p>
+    <nav aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="about.html" class="active">About</a>
         <a href="dad-jokes.html">Dad Jokes</a>
         <a href="puns.html">Puns</a>
         <a href="one-liners.html">One-Liners</a>
+        <a href="archive.html">Archive</a>
     </nav>
 </header>
+
+<main id="main-content">
     <section class="seo-section">
-        <h2>About HeuHeu Jokes</h2>
+        <h1>About HeuHeu Jokes</h1>
         <p>
-            HeuHeu Jokes is a simple site for quick laughs. No popups, no spam – just dad jokes, puns, and one-liners
-            you can read on your lunch break or send to friends. Bookmark this page when you need something light.
+            HeuHeu started as a minimalist space to grab a laugh when you need one most. No popups, newsletter walls,
+            or autoplaying videos—just a clean list of dad jokes, puns, and one-liners you can scroll on any device.
         </p>
         <p>
-            You can browse our <a href="dad-jokes.html">dad jokes</a>, scroll through cheesy <a href="puns.html">puns</a>,
-            or grab short <a href="one-liners.html">one-liners</a> for status updates, intros, and icebreakers.
+            The stories here are hand-picked and organized by vibe so you can grab the perfect line for your next
+            caption, meeting icebreaker, or family text thread.
         </p>
     </section>
 
+    <section class="seo-section">
+        <h2>What you’ll find here</h2>
+        <ul>
+            <li><a href="index.html">Random joke generator</a> for instant laughs.</li>
+            <li><a href="dad-jokes.html">Dad joke collection</a> for prime groaners.</li>
+            <li><a href="puns.html">Pun list</a> when you need peak wordplay.</li>
+            <li><a href="one-liners.html">One-liner stash</a> to drop in chats or intros.</li>
+            <li><a href="archive.html">Full archive browser</a> to scan every joke at once.</li>
+        </ul>
+    </section>
+</main>
+
 <footer>
-    <p>&copy; <span id="year"></span> The HeuHeu. All rights reserved. 
-    | <a href="/privacy.html">Privacy Policy</a></p>
-
-    <!-- TODO: Insert your AdSense code here once approved -->
+    <p>&copy; <span data-year></span> The HeuHeu. All rights reserved.
+    | <a href="privacy.html">Privacy Policy</a></p>
 </footer>
-
 </body>
 </html>

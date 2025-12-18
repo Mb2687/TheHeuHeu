@@ -2,25 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>The Heuheu - One Liners</title>
+    <title>The Heuheu – One-Liners</title>
     <meta name="description" content="Short one-liner jokes you can drop into chats, statuses, and awkward silences.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/styles.css">
+    <script src="js/jokes.js" defer></script>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to content</a>
 <header>
+    <img class="heuheu" src="Photos/heuheu.jpeg" alt="Heuheu mascot" loading="lazy" width="150" height="150">
     <h1>The Heuheu</h1>
-    <p>Dad jokes, puns & one-liners.</p>
-    <nav>
-        <a href="index.html" class="active">Home</a>
+    <p>Dad jokes, puns &amp; one-liners.</p>
+    <nav aria-label="Primary">
+        <a href="index.html">Home</a>
         <a href="about.html">About</a>
         <a href="dad-jokes.html">Dad Jokes</a>
         <a href="puns.html">Puns</a>
-        <a href="one-liners.html">One-Liners</a>
+        <a href="one-liners.html" class="active">One-Liners</a>
+        <a href="archive.html">Archive</a>
     </nav>
 </header>
 
-<main class="joke-list-page">
+<main id="main-content" class="joke-list-page">
     <h1>One-Liners</h1>
     <p class="intro">
         One-liners are quick jokes you can drop into any conversation. They’re short, punchy, and easy to remember.
@@ -61,16 +65,8 @@
 </main>
 
 <footer>
-    <p>&copy; <span id="year"></span> The Heuheu. All rights reserved. 
-    | <a href="/privacy.html">Privacy Policy</a></p>
-</footer>
-
-<script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-</script>
-<footer>
-    <p>&copy; <span id="year"></span> The Heuheu. All rights reserved. 
-    | <a href="/privacy.html">Privacy Policy</a></p>
+    <p>&copy; <span data-year></span> The HeuHeu. All rights reserved.
+    | <a href="privacy.html">Privacy Policy</a></p>
 </footer>
 </body>
 </html>
