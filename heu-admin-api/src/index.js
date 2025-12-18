@@ -16,6 +16,26 @@ const FIREBASE_CERTS_URL =
 
 let cachedCerts = null;
 let certsFetchedAt = 0;
+let certsExpiresAt = 0;
+
+// Base64url helpers keep JWT parsing reliable across all Firebase tokens.
+const base64UrlToString = (input) => {
+  let normalized = input.replace(/-/g, "+").replace(/_/g, "/");
+  const padding = normalized.length % 4;
+  if (padding) {
+    normalized += "=".repeat(4 - padding);
+  }
+  return atob(normalized);
+};
+
+const base64UrlToBytes = (input) => {
+  const binary = base64UrlToString(input);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes;
+};
 
 // ─────────────────────────────
 // Firebase cert handling
@@ -23,13 +43,36 @@ let certsFetchedAt = 0;
 async function getFirebaseCerts() {
   const ONE_HOUR = 60 * 60 * 1000;
 
-  if (cachedCerts && Date.now() - certsFetchedAt < ONE_HOUR) {
+  if (cachedCerts && Date.now() < certsExpiresAt) {
     return cachedCerts;
   }
 
-  const res = await fetch(FIREBASE_CERTS_URL);
+  let res;
+  // Fetch certs with graceful degradation and honor Google's cache hints.
+  try {
+    res = await fetch(FIREBASE_CERTS_URL);
+  } catch (error) {
+    if (cachedCerts) {
+      return cachedCerts;
+    }
+    throw error;
+  }
+
+  if (!res.ok) {
+    if (cachedCerts) {
+      return cachedCerts;
+    }
+    throw new Error("Unable to fetch Firebase certs");
+  }
+
   cachedCerts = await res.json();
   certsFetchedAt = Date.now();
+
+  const cacheControl = res.headers.get("Cache-Control") || "";
+  const maxAgeMatch = cacheControl.match(/max-age=(\d+)/);
+  const maxAgeMs = maxAgeMatch ? parseInt(maxAgeMatch[1], 10) * 1000 : ONE_HOUR;
+  certsExpiresAt = certsFetchedAt + maxAgeMs;
+
   return cachedCerts;
 }
 
@@ -47,15 +90,16 @@ async function verifyFirebaseJWT(token) {
   const [headerB64, payloadB64, signatureB64] = token.split(".");
   if (!signatureB64) throw new Error("Invalid JWT format");
 
-  const header = JSON.parse(atob(headerB64));
-  const payload = JSON.parse(atob(payloadB64));
+  const header = JSON.parse(base64UrlToString(headerB64));
+  if (header.alg !== "RS256") throw new Error("Unsupported algorithm");
+  const payload = JSON.parse(base64UrlToString(payloadB64));
 
   const certs = await getFirebaseCerts();
   const cert = certs[header.kid];
   if (!cert) throw new Error("Invalid token key ID");
 
   const data = new TextEncoder().encode(`${headerB64}.${payloadB64}`);
-  const signature = Uint8Array.from(atob(signatureB64), c => c.charCodeAt(0));
+  const signature = base64UrlToBytes(signatureB64);
 
   const key = await crypto.subtle.importKey(
     "spki",
@@ -75,6 +119,8 @@ async function verifyFirebaseJWT(token) {
   if (!valid) throw new Error("Invalid signature");
   if (payload.iss !== FIREBASE_ISSUER) throw new Error("Invalid issuer");
   if (payload.aud !== FIREBASE_PROJECT_ID) throw new Error("Invalid audience");
+  // Enforce temporal validity to prevent replaying old Firebase tokens.
+  if (!payload.exp || payload.exp * 1000 <= Date.now()) throw new Error("Token expired");
 
   return payload;
 }
