@@ -498,12 +498,17 @@
             .map((monthKey) => ({
                 monthKey,
                 label: getMonthLabel(monthKey),
-                jokes: typeData[monthKey].slice()
+                jokes: typeData[monthKey].map((text) => ({
+                    text,
+                    author: 'The Heuheu'
+                }))
             }));
     };
 
     const compiledTypeJokes = Object.keys(jokeCollections).reduce((acc, typeKey) => {
-        acc[typeKey] = buildMonthlyGroups(typeKey).flatMap((group) => group.jokes);
+        acc[typeKey] = buildMonthlyGroups(typeKey)
+            .flatMap((group) => group.jokes)
+            .map((joke) => joke.text);
         return acc;
     }, {});
 
@@ -530,27 +535,93 @@
         return list;
     };
 
-    const createJokeCardElement = (monthLabel, text) => {
+    const createJokeCardElement = (monthLabel, text, author) => {
         const card = document.createElement('div');
         card.className = 'joke-card';
         card.setAttribute('role', 'listitem');
 
         const tag = document.createElement('span');
-        tag.textContent = monthLabel;
+        tag.textContent = author ? `${monthLabel} • ${author}` : monthLabel;
         card.appendChild(tag);
 
         card.appendChild(document.createTextNode(text));
         return card;
     };
 
-    const getAvailableMonthKeys = (type = 'mixed') => {
-        if (type && type !== 'mixed' && jokeCollections[type]) {
-            return Object.keys(jokeCollections[type]).sort((a, b) => parseMonthKey(b) - parseMonthKey(a));
+    const getMonthKeyFromDate = (value) => {
+        if (!value) {
+            return null;
         }
 
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) {
+            return null;
+        }
+
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        return `${date.getFullYear()}-${month}`;
+    };
+
+    const getApprovedJokeEntriesByType = (type = 'mixed') => {
+        const entries = type && type !== 'mixed'
+            ? submissionState.approved.filter((entry) => entry.category === type)
+            : submissionState.approved;
+
+        return entries.map((entry) => {
+            const dateValue = entry.approvedAt || entry.submittedAt;
+            return {
+                text: entry.text,
+                author: getDisplayAlias(entry.alias),
+                monthLabel: formatMonthYearLabel(dateValue),
+                monthKey: getMonthKeyFromDate(dateValue)
+            };
+        }).filter((entry) => entry.monthKey);
+    };
+
+    const mergeApprovedIntoGroups = (groups, typeKey) => {
+        const approvedEntries = getApprovedJokeEntriesByType(typeKey);
+        if (!approvedEntries.length) {
+            return groups;
+        }
+
+        const groupMap = new Map(groups.map((group) => [group.monthKey, {
+            ...group,
+            jokes: group.jokes.slice()
+        }]));
+
+        approvedEntries.forEach((entry) => {
+            if (!groupMap.has(entry.monthKey)) {
+                groupMap.set(entry.monthKey, {
+                    monthKey: entry.monthKey,
+                    label: entry.monthLabel,
+                    jokes: []
+                });
+            }
+            groupMap.get(entry.monthKey).jokes.push({
+                text: entry.text,
+                author: entry.author
+            });
+        });
+
+        return Array.from(groupMap.values())
+            .sort((a, b) => parseMonthKey(b.monthKey) - parseMonthKey(a.monthKey));
+    };
+
+    const getAvailableMonthKeys = (type = 'mixed') => {
         const monthSet = new Set();
-        Object.values(jokeCollections).forEach((typeData) => {
-            Object.keys(typeData).forEach((month) => monthSet.add(month));
+
+        if (type && type !== 'mixed' && jokeCollections[type]) {
+            Object.keys(jokeCollections[type]).forEach((month) => monthSet.add(month));
+        } else {
+            Object.values(jokeCollections).forEach((typeData) => {
+                Object.keys(typeData).forEach((month) => monthSet.add(month));
+            });
+        }
+
+        getApprovedJokeEntriesByType(type).forEach((entry) => {
+            if (entry.monthKey) {
+                monthSet.add(entry.monthKey);
+            }
         });
 
         return Array.from(monthSet).sort((a, b) => parseMonthKey(b) - parseMonthKey(a));
@@ -561,14 +632,14 @@
             return [{
                 type,
                 label: getReadableLabel(type),
-                months: buildMonthlyGroups(type)
+                months: mergeApprovedIntoGroups(buildMonthlyGroups(type), type)
             }];
         }
 
         return Object.keys(jokeCollections).map((typeKey) => ({
             type: typeKey,
             label: getReadableLabel(typeKey),
-            months: buildMonthlyGroups(typeKey)
+            months: mergeApprovedIntoGroups(buildMonthlyGroups(typeKey), typeKey)
         }));
     };
 
@@ -587,7 +658,7 @@
                     .filter((month) => archiveState.month === 'all' || month.monthKey === archiveState.month)
                     .map((month) => {
                         const jokes = query
-                            ? month.jokes.filter((joke) => joke.toLowerCase().includes(query))
+                            ? month.jokes.filter((joke) => (`${joke.text} ${joke.author}`).toLowerCase().includes(query))
                             : month.jokes;
                         return {
                             ...month,
@@ -627,7 +698,7 @@
 
                 const list = createJokeListElement(`${month.label} ${group.label}`);
                 month.jokes.forEach((joke) => {
-                    list.appendChild(createJokeCardElement(month.label, joke));
+                    list.appendChild(createJokeCardElement(month.label, joke.text, joke.author));
                 });
 
                 monthSection.appendChild(list);
@@ -673,9 +744,9 @@
             list.setAttribute('role', 'list');
             list.setAttribute('aria-label', `${label} collection`);
 
-            buildMonthlyGroups(typeKey).forEach((month) => {
+            mergeApprovedIntoGroups(buildMonthlyGroups(typeKey), typeKey).forEach((month) => {
                 month.jokes.forEach((joke) => {
-                    list.appendChild(createJokeCardElement(month.label, joke));
+                    list.appendChild(createJokeCardElement(month.label, joke.text, joke.author));
                 });
             });
         });

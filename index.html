@@ -19,10 +19,9 @@
     <nav aria-label="Primary">
         <a href="index.html" class="active">Home</a>
         <a href="about.html">About</a>
-        <a href="dad-jokes.html">Dad Jokes</a>
-        <a href="puns.html">Puns</a>
-        <a href="one-liners.html">One-Liners</a>
-        <a href="archive.html">Archive</a>
+        <a href="archive.html">All Jokes</a>
+        <a href="#submit-joke">Submit a Joke</a>
+        <a href="help.html">Help</a>
     </nav>
 </header>
 
@@ -45,7 +44,7 @@
             skip brands, and keep things light so we stay in line with AdSense and good vibes.
         </p>
         <div class="community-grid">
-            <article class="community-card" aria-labelledby="submit-title">
+            <article class="community-card" id="submit-joke" aria-labelledby="submit-title">
                 <h3 id="submit-title">Submit a Joke</h3>
                 <p class="community-note">Pick an alias, keep it kind, and double-check before sending. Every submission is reviewed before it goes live.</p>
                 <ul class="policy-list">
@@ -100,57 +99,6 @@
                     <button type="submit">Notify me</button>
                     <p class="form-feedback" data-subscribe-feedback role="status" aria-live="polite"></p>
                 </form>
-            </article>
-
-            <article class="community-card complaint-card" aria-labelledby="complaint-title">
-                <h3 id="complaint-title">Report a Problem</h3>
-                <p class="community-note">If a joke feels off, let us know and we’ll review it quickly.</p>
-                <form id="complaint-form" class="community-form" novalidate>
-                    <div class="form-field">
-                        <label for="complaint-alias">Alias or Display Name (optional)</label>
-                        <input type="text" id="complaint-alias" maxlength="60" placeholder="HelpfulHuman">
-                    </div>
-                    <div class="form-field">
-                        <label for="complaint-email">Contact Email (optional)</label>
-                        <input type="email" id="complaint-email" placeholder="you@example.com">
-                    </div>
-                    <div class="form-field">
-                        <label for="complaint-reference">Joke Reference*</label>
-                        <input type="text" id="complaint-reference" maxlength="200" placeholder="Quote part of the joke or alias you saw" required>
-                        <small>Include the alias and a short snippet so we can find it.</small>
-                    </div>
-                    <div class="form-field">
-                        <label for="complaint-reason">Why should it be reviewed?*</label>
-                        <textarea id="complaint-reason" rows="4" maxlength="400" placeholder="Explain why it should be removed (hate speech, offensive, etc.)" required></textarea>
-                    </div>
-                    <label class="consent">
-                        <input type="checkbox" id="complaint-check" required>
-                        I understand this form is for reporting offensive or policy-breaking content.
-                    </label>
-                    <button type="submit">Submit Complaint</button>
-                    <p class="form-feedback" data-complaint-feedback role="status" aria-live="polite"></p>
-                </form>
-            </article>
-
-            <article class="community-card admin-access-card" aria-labelledby="admin-access-title">
-                <h3 id="admin-access-title">Admin Tools</h3>
-                <p class="community-note">
-                    Only The HeuHeu team can review, approve, delete jokes, and handle complaints. Confirm using the admin email.
-                </p>
-                <form id="admin-access-form" class="community-form" novalidate>
-                    <div class="form-field">
-                        <label for="admin-email">Admin Email</label>
-                        <input type="email" id="admin-email" placeholder="theheuheu@gmail.com" required>
-                    </div>
-                    <div class="form-field">
-                        <label for="admin-code">Access Code</label>
-                        <input type="password" id="admin-code" placeholder="Enter admin code" required>
-                        <small>Need help? Check the admin inbox to confirm the latest code.</small>
-                    </div>
-                    <button type="submit">Unlock Admin Mode</button>
-                </form>
-                <p class="admin-status" data-admin-status>Admin mode is locked.</p>
-                <button type="button" class="admin-signout" data-admin-signout hidden>Sign out</button>
             </article>
 
             <article class="community-card review-card admin-only" aria-labelledby="review-title">
