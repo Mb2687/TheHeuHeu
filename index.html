@@ -1,152 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>The Heuheu – Random Dad Jokes, Puns &amp; One-Liners</title>
-    <meta name="description" content="Get a random dad joke, pun, or one-liner with one click. Simple, clean joke site for quick laughs.">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/styles.css">
-    <script src="js/jokes.js" defer></script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7688808737901589"
-     crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <title>Free Online Tools – theheuheu</title>
+  <meta name="description" content="theheuheu.com is a junk drawer of free online tools for PDFs and images, all running locally in your browser.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<a class="skip-link" href="#main-content">Skip to content</a>
-<header>
-    <img class="heuheu" src="Photos/heuheu.jpeg" alt="Heuheu mascot" loading="lazy" width="150" height="150"/>
-    <h1>The Heuheu</h1>
-    <p>Random dad jokes, puns &amp; one-liners with one click.</p>
-    <nav aria-label="Primary">
-        <a href="index.html" class="active">Home</a>
+  <header>
+    <div class="wrap">
+      <a href="index.html">theheuheu.com</a>
+      <nav aria-label="Primary">
+        <a href="tools.html">Tools</a>
         <a href="about.html">About</a>
-        <a href="archive.html">All Jokes</a>
-        <a href="#submit-joke">Submit a Joke</a>
-        <a href="help.html">Help</a>
-    </nav>
-</header>
+      </nav>
+    </div>
+  </header>
 
-<main id="main-content">
+  <main>
     <section class="hero">
-        <h2>Click for a random joke</h2>
-        <div id="joke-box" role="status" aria-live="polite">Press a button to get a joke.</div>
-        <div class="buttons">
-            <button type="button" data-joke-button="mixed">Random (Any)</button>
-            <button type="button" data-joke-button="dad">Dad Joke</button>
-            <button type="button" data-joke-button="pun">Pun</button>
-            <button type="button" data-joke-button="one">One-Liner</button>
+      <div class="hero-copy">
+        <h1>Free Online Tools</h1>
+        <p>The Heuheu is a junk drawer full of online tools. Pick a category and get to work.</p>
+        <div class="category-grid">
+          <a class="category-card" href="tools.html#pdf-tools">
+            <span class="category-title">PDF Tools</span>
+            <span class="category-meta">Split, convert, and organize PDFs.</span>
+          </a>
+          <a class="category-card" href="tools.html#image-tools">
+            <span class="category-title">Image Tools</span>
+            <span class="category-meta">Convert, compress, and clean up images.</span>
+          </a>
+          <a class="category-card" href="tools.html#utf-tools">
+            <span class="category-title">Unicode Symbols</span>
+            <span class="category-meta">Copy special symbols with shortcuts.</span>
+          </a>
         </div>
+      </div>
+      <div class="hero-drawer" aria-hidden="true">
+        <img class="drawer-image" src="Photos/junk-drawer.png" alt="" loading="lazy">
+        <div class="drawer-label">Junk drawer of tools</div>
+      </div>
     </section>
+  </main>
 
-    <section class="community-section" id="share-laughs" aria-labelledby="community-title">
-        <h2 id="community-title">Share a Joke &amp; Stay in the Loop</h2>
-        <p class="community-lede">
-            Help keep The HeuHeu inclusive by sharing original, PG-rated jokes. Skip personal names,
-            skip brands, and keep things light so we stay in line with AdSense and good vibes.
-        </p>
-        <div class="community-grid">
-            <article class="community-card" id="submit-joke" aria-labelledby="submit-title">
-                <h3 id="submit-title">Submit a Joke</h3>
-                <p class="community-note">Pick an alias, keep it kind, and double-check before sending. Every submission is reviewed before it goes live.</p>
-                <ul class="policy-list">
-                    <li>No personal names or call-outs.</li>
-                    <li>No company or product mentions.</li>
-                    <li>No profanity, hate, or adult themes.</li>
-                </ul>
-                <form id="joke-submission-form" class="community-form" novalidate>
-                    <div class="form-field">
-                        <label for="joke-alias">Alias (optional)</label>
-                        <input type="text" id="joke-alias" name="alias" maxlength="40" placeholder="PunMaster3000">
-                        <small>Alias shows up publicly if your joke is picked. Leave blank to stay Anonymous.</small>
-                    </div>
-                    <div class="form-field">
-                        <label for="joke-category">Joke style</label>
-                        <select id="joke-category" name="category">
-                            <option value="dad">Dad Joke</option>
-                            <option value="pun">Pun</option>
-                            <option value="one">One-Liner</option>
-                        </select>
-                    </div>
-                    <div class="form-field">
-                        <label for="joke-text">Your joke*</label>
-                        <textarea id="joke-text" name="joke" rows="4" maxlength="280" placeholder="Write a short joke that keeps it PG." required></textarea>
-                        <small>Keep it inclusive and under 280 characters.</small>
-                    </div>
-                    <label class="consent">
-                        <input type="checkbox" id="policy-check" required>
-                        I confirm this joke is original, safe for everyone, and follows these rules.
-                    </label>
-                    <button type="submit">Send it in</button>
-                    <p class="form-feedback" data-joke-feedback role="status" aria-live="polite"></p>
-                </form>
-            </article>
-
-            <article class="community-card" aria-labelledby="subscribe-title">
-                <h3 id="subscribe-title">Get New Jokes by Email</h3>
-                <p>Drop your email for a clean, occasional update when we add fresh laughs.</p>
-                <form id="subscription-form" class="community-form" novalidate>
-                    <div class="form-field">
-                        <label for="subscribe-alias">Alias (optional)</label>
-                        <input type="text" id="subscribe-alias" name="alias" maxlength="40" placeholder="LaughSeeker">
-                    </div>
-                    <div class="form-field">
-                        <label for="subscribe-email">Email*</label>
-                        <input type="email" id="subscribe-email" name="email" placeholder="you@example.com" required>
-                    </div>
-                    <label class="consent">
-                        <input type="checkbox" id="subscribe-consent" required>
-                        I agree to receive occasional joke updates. No spam, unsubscribe anytime.
-                    </label>
-                    <button type="submit">Notify me</button>
-                    <p class="form-feedback" data-subscribe-feedback role="status" aria-live="polite"></p>
-                </form>
-            </article>
-
-            <article class="community-card review-card admin-only" aria-labelledby="review-title">
-                <h3 id="review-title">Review Queue</h3>
-                <p class="community-note">New submissions stay here until you approve or reject them.</p>
-                <div class="review-empty" data-review-empty>
-                    Nothing pending yet. Approved jokes will show up once you add them.
-                </div>
-                <ul class="review-list" data-review-list aria-live="polite" aria-label="Pending joke submissions"></ul>
-                <p class="review-hint">Only approved jokes move to the site and email list.</p>
-            </article>
-        </div>
-
-        <section class="community-card approved-card admin-only" aria-labelledby="approved-title">
-            <h3 id="approved-title">Community-Approved Laughs</h3>
-            <p class="community-note">
-                Each entry shows when it was added (MMM YYYY) and the alias provided. Alias defaults to Anonymous.
-            </p>
-            <div data-approved-empty class="review-empty">No community jokes yet—approve one to see it here.</div>
-            <ul class="approved-list" data-approved-list></ul>
-        </section>
-
-        <section class="community-card admin-only" aria-labelledby="complaint-review-title">
-            <h3 id="complaint-review-title">Complaint Desk</h3>
-            <p class="community-note">Review reports, resolve them, or delete the flagged content.</p>
-            <div class="review-empty" data-complaints-empty>No complaints at the moment.</div>
-            <ul class="complaint-list" data-complaint-list aria-live="polite"></ul>
-        </section>
-    </section>
-
-    <section class="seo-section">
-        <h2>About HeuHeu Jokes</h2>
-        <p>
-            HeuHeu Jokes is a simple site for quick laughs. No popups, no spam – just dad jokes, puns, and one-liners
-            you can read on your lunch break or send to friends. Bookmark this page when you need something light.
-        </p>
-        <p>
-            You can browse our <a href="dad-jokes.html">dad jokes</a>, scroll through cheesy <a href="puns.html">puns</a>,
-            or grab short <a href="one-liners.html">one-liners</a> for status updates, intros, and icebreakers.
-        </p>
-    </section>
-</main>
-
-<footer>
-    <p>&copy; <span data-year></span> The HeuHeu. All rights reserved. 
-    | <a href="privacy.html">Privacy Policy</a></p>
-
-    <!-- AdSense code once approved -->
-</footer>
+  <footer>
+    <a href="tools.html">Tools</a>
+    <a href="about.html">About</a>
+  </footer>
 </body>
 </html>

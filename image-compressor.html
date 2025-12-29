@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Image Compressor – theheuheu</title>
+  <meta name="description" content="Compress JPG and PNG images locally in your browser.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <a href="index.html">theheuheu.com</a>
+      <nav aria-label="Primary">
+        <a href="tools.html">Tools</a>
+        <a href="about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="tool-card">
+      <h1>Image Compressor</h1>
+      <p>Reduce file size for JPG or PNG images before sharing.</p>
+
+      <div class="upload-area">
+        <input id="compress-input" type="file" accept="image/jpeg,image/png" multiple>
+      </div>
+
+      <label class="range-row" for="compress-quality">
+        Compression quality
+        <span id="compress-quality-value">80%</span>
+      </label>
+      <input id="compress-quality" class="range-input" type="range" min="40" max="95" value="80">
+
+      <button id="compress-button" type="button">Compress Images</button>
+      <div id="compress-status" class="status" role="status" aria-live="polite"></div>
+
+      <div id="compress-output" class="output-list" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer>
+    <a href="index.html">Home</a>
+    <a href="tools.html">Tools</a>
+  </footer>
+</body>
+</html>
