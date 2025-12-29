@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Temperature Converter – theheuheu</title>
+  <meta name="description" content="Convert temperature units between Fahrenheit, Celsius, Kelvin, and Rankine.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <a href="index.html" class="brand">theheuheu.com</a>
+      <nav aria-label="Primary">
+        <a href="tools.html">Tools</a>
+        <a href="about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="tool-card">
+      <h1>Temperature Converter</h1>
+      <p>Convert values between Fahrenheit, Celsius, Kelvin, and Rankine.</p>
+
+      <label class="range-row" for="temp-input">Temperature value</label>
+      <input id="temp-input" class="text-input" type="number" step="any" inputmode="decimal" placeholder="e.g. 32">
+
+      <label class="range-row" for="temp-unit">Input unit</label>
+      <select id="temp-unit" class="select-input">
+        <option value="F">Fahrenheit (F)</option>
+        <option value="C">Celsius (C)</option>
+        <option value="K">Kelvin (K)</option>
+        <option value="R">Rankine (R)</option>
+      </select>
+
+      <div id="temp-status" class="status" role="status" aria-live="polite"></div>
+
+      <div id="temp-output" class="output-list" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2025 The Heuheu. All rights reserved.</span>
+</div>
+</footer>
+</body>
+</html>

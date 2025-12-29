@@ -390,11 +390,334 @@
     });
   };
 
+  const initTemperatureConverter = () => {
+    const input = document.querySelector("#temp-input");
+    const unit = document.querySelector("#temp-unit");
+    const statusText = document.querySelector("#temp-status");
+    const output = document.querySelector("#temp-output");
+
+    if (!input || !unit || !statusText || !output) {
+      return;
+    }
+
+    const formatTemp = (value) => {
+      if (!Number.isFinite(value)) {
+        return "n/a";
+      }
+      const fixed = value.toFixed(2);
+      return fixed.replace(/\.?0+$/, "");
+    };
+
+    const render = () => {
+      const raw = input.value.trim();
+      if (!raw) {
+        setStatus(statusText, "Enter a temperature to convert.");
+        output.innerHTML = "";
+        return;
+      }
+
+      const value = Number(raw);
+      if (Number.isNaN(value)) {
+        setStatus(statusText, "Enter a valid number.");
+        output.innerHTML = "";
+        return;
+      }
+
+      let c = 0;
+      let f = 0;
+      let k = 0;
+      let r = 0;
+
+      switch (unit.value) {
+        case "C":
+          c = value;
+          k = c + 273.15;
+          f = (c * 9) / 5 + 32;
+          r = (c + 273.15) * 9 / 5;
+          break;
+        case "F":
+          f = value;
+          c = ((f - 32) * 5) / 9;
+          k = c + 273.15;
+          r = f + 459.67;
+          break;
+        case "K":
+          k = value;
+          c = k - 273.15;
+          f = (c * 9) / 5 + 32;
+          r = (k * 9) / 5;
+          break;
+        case "R":
+          r = value;
+          k = (r * 5) / 9;
+          c = k - 273.15;
+          f = r - 459.67;
+          break;
+        default:
+          break;
+      }
+
+      setStatus(statusText, "Converted values:");
+      output.innerHTML = `
+        <div class="output-item">
+          <span>Fahrenheit (F)</span>
+          <span>${formatTemp(f)}</span>
+        </div>
+        <div class="output-item">
+          <span>Celsius (C)</span>
+          <span>${formatTemp(c)}</span>
+        </div>
+        <div class="output-item">
+          <span>Kelvin (K)</span>
+          <span>${formatTemp(k)}</span>
+        </div>
+        <div class="output-item">
+          <span>Rankine (R)</span>
+          <span>${formatTemp(r)}</span>
+        </div>
+      `;
+    };
+
+    setStatus(statusText, "Enter a temperature to convert.");
+    input.addEventListener("input", () => {
+      if (input.value.trim()) {
+        render();
+      }
+    });
+    unit.addEventListener("change", () => {
+      if (input.value.trim()) {
+        render();
+      }
+    });
+  };
+
+  const initTimeCalculator = () => {
+    const startInput = document.querySelector("#time-start");
+    const endInput = document.querySelector("#time-end");
+    const directionSelect = document.querySelector("#time-direction");
+    const calcButton = document.querySelector("#time-calc-button");
+    const statusText = document.querySelector("#time-status");
+    const output = document.querySelector("#time-output");
+
+    if (!startInput || !endInput || !directionSelect || !calcButton || !statusText || !output) {
+      return;
+    }
+
+    const addMonthsClamped = (date, months) => {
+      const result = new Date(date);
+      const day = result.getDate();
+      result.setDate(1);
+      result.setMonth(result.getMonth() + months);
+      const daysInMonth = new Date(result.getFullYear(), result.getMonth() + 1, 0).getDate();
+      result.setDate(Math.min(day, daysInMonth));
+      return result;
+    };
+
+    const addYearsClamped = (date, years) => addMonthsClamped(date, years * 12);
+
+    const computeDifference = (start, end) => {
+      let years = end.getFullYear() - start.getFullYear();
+      let cursor = addYearsClamped(start, years);
+      if (cursor > end) {
+        years -= 1;
+        cursor = addYearsClamped(start, years);
+      }
+
+      let months = end.getMonth() - cursor.getMonth();
+      if (months < 0) {
+        months += 12;
+      }
+      let monthCursor = addMonthsClamped(cursor, months);
+      if (monthCursor > end) {
+        months -= 1;
+        monthCursor = addMonthsClamped(cursor, months);
+      }
+
+      let remainingMs = end - monthCursor;
+      const msInSecond = 1000;
+      const msInMinute = msInSecond * 60;
+      const msInHour = msInMinute * 60;
+      const msInDay = msInHour * 24;
+
+      const days = Math.floor(remainingMs / msInDay);
+      remainingMs -= days * msInDay;
+      const hours = Math.floor(remainingMs / msInHour);
+      remainingMs -= hours * msInHour;
+      const minutes = Math.floor(remainingMs / msInMinute);
+      remainingMs -= minutes * msInMinute;
+      const seconds = Math.floor(remainingMs / msInSecond);
+
+      return {
+        years,
+        months,
+        days,
+        hours,
+        minutes,
+        seconds,
+      };
+    };
+
+    const render = () => {
+      const startValue = startInput.value;
+      const endValue = endInput.value;
+
+      if (!startValue || !endValue) {
+        setStatus(statusText, "Choose both start and end dates.");
+        output.innerHTML = "";
+        return;
+      }
+
+      const startDate = new Date(startValue);
+      const endDate = new Date(endValue);
+
+      if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) {
+        setStatus(statusText, "Enter valid dates.");
+        output.innerHTML = "";
+        return;
+      }
+
+      let start = startDate;
+      let end = endDate;
+      if (directionSelect.value === "start-end") {
+        start = endDate;
+        end = startDate;
+      }
+
+      if (end < start) {
+        setStatus(statusText, "The end date is earlier than the start date.");
+        output.innerHTML = "";
+        return;
+      }
+
+      const diff = computeDifference(start, end);
+      setStatus(statusText, "Difference:");
+      output.innerHTML = `
+        <div class="output-item">
+          <span>Years</span>
+          <span>${diff.years}</span>
+        </div>
+        <div class="output-item">
+          <span>Months</span>
+          <span>${diff.months}</span>
+        </div>
+        <div class="output-item">
+          <span>Days</span>
+          <span>${diff.days}</span>
+        </div>
+        <div class="output-item">
+          <span>Hours</span>
+          <span>${diff.hours}</span>
+        </div>
+        <div class="output-item">
+          <span>Minutes</span>
+          <span>${diff.minutes}</span>
+        </div>
+        <div class="output-item">
+          <span>Seconds</span>
+          <span>${diff.seconds}</span>
+        </div>
+      `;
+    };
+
+    setStatus(statusText, "Choose two dates to calculate the difference.");
+    calcButton.addEventListener("click", render);
+  };
+
+  const initTimeZoneCalculator = () => {
+    const timeAInput = document.querySelector("#time-a");
+    const timeBInput = document.querySelector("#time-b");
+    const zoneASelect = document.querySelector("#time-a-zone");
+    const zoneBSelect = document.querySelector("#time-b-zone");
+    const directionSelect = document.querySelector("#time-direction-short");
+    const calcButton = document.querySelector("#time-short-calc-button");
+    const statusText = document.querySelector("#time-short-status");
+    const output = document.querySelector("#time-short-output");
+
+    if (!timeAInput || !timeBInput || !zoneASelect || !zoneBSelect || !directionSelect || !calcButton || !statusText || !output) {
+      return;
+    }
+
+    const parseTime = (value) => {
+      const parts = value.split(":");
+      if (parts.length < 2) {
+        return null;
+      }
+      const hours = Number(parts[0]);
+      const minutes = Number(parts[1]);
+      if (Number.isNaN(hours) || Number.isNaN(minutes)) {
+        return null;
+      }
+      return { hours, minutes };
+    };
+
+    const toUtcMinutes = (timeValue, offsetMinutes) => {
+      const parsed = parseTime(timeValue);
+      if (!parsed) {
+        return null;
+      }
+      return parsed.hours * 60 + parsed.minutes - offsetMinutes;
+    };
+
+    const render = () => {
+      if (!timeAInput.value || !timeBInput.value) {
+        setStatus(statusText, "Enter both times to calculate.");
+        output.innerHTML = "";
+        return;
+      }
+
+      const offsetA = Number(zoneASelect.value);
+      const offsetB = Number(zoneBSelect.value);
+      const utcMinutesA = toUtcMinutes(timeAInput.value, offsetA);
+      const utcMinutesB = toUtcMinutes(timeBInput.value, offsetB);
+
+      if (utcMinutesA === null || utcMinutesB === null) {
+        setStatus(statusText, "Enter valid times.");
+        output.innerHTML = "";
+        return;
+      }
+
+      let diffMinutes = 0;
+      if (directionSelect.value === "a-b") {
+        diffMinutes = utcMinutesA - utcMinutesB;
+      } else {
+        diffMinutes = utcMinutesB - utcMinutesA;
+      }
+
+      const sign = diffMinutes < 0 ? "-" : "";
+      const totalSeconds = Math.abs(diffMinutes) * 60;
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      setStatus(statusText, "Difference:");
+      output.innerHTML = `
+        <div class="output-item">
+          <span>Hours</span>
+          <span>${sign}${hours}</span>
+        </div>
+        <div class="output-item">
+          <span>Minutes</span>
+          <span>${sign}${minutes}</span>
+        </div>
+        <div class="output-item">
+          <span>Seconds</span>
+          <span>${sign}${seconds}</span>
+        </div>
+      `;
+    };
+
+    setStatus(statusText, "Enter two times to calculate the difference.");
+    calcButton.addEventListener("click", render);
+  };
+
   initImageToPdf();
   initPdfToImages();
   initImageCompressor();
   initPdfSplitter();
   initHeicConverter();
+  initTemperatureConverter();
+  initTimeCalculator();
+  initTimeZoneCalculator();
   const initUtf8Tool = () => {
     const list = document.querySelector("#utf-list");
     const statusText = document.querySelector("#utf-status");

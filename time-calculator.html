@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Time Calculator – theheuheu</title>
+  <meta name="description" content="Calculate the time difference between two dates in years, months, days, hours, minutes, and seconds.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <a href="index.html" class="brand">theheuheu.com</a>
+      <nav aria-label="Primary">
+        <a href="tools.html">Tools</a>
+        <a href="about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="tool-card">
+      <h1>Time Calculator</h1>
+      <p>Calculate the difference between two dates down to the second.</p>
+
+      <label class="range-row" for="time-start">Start date and time</label>
+      <input id="time-start" class="text-input" type="datetime-local">
+
+      <label class="range-row" for="time-end">End date and time</label>
+      <input id="time-end" class="text-input" type="datetime-local">
+
+      <label class="range-row" for="time-direction">Direction</label>
+      <select id="time-direction" class="select-input">
+        <option value="end-start">End - Start</option>
+        <option value="start-end">Start - End</option>
+      </select>
+
+      <button id="time-calc-button" type="button">Calculate</button>
+      <div id="time-status" class="status" role="status" aria-live="polite"></div>
+
+      <div id="time-output" class="output-list" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2025 The Heuheu. All rights reserved.</span>
+</div>
+</footer>
+</body>
+</html>
