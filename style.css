@@ -95,6 +95,18 @@ p {
   color: var(--muted);
 }
 
+img {
+  display: block;
+  width: 200px;
+  aspect-ratio: 1 / 1;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 2px solid #a4845a;
+  object-fit: cover;
+  object-position: center;
+}
+
 .tool-card {
   border: 2px solid var(--border);
   padding: 24px;
@@ -102,7 +114,6 @@ p {
   background: var(--paper);
   box-shadow: 0 10px 24px var(--shadow);
 }
-
 
 .upload-area {
   border: 2px dashed var(--border);
