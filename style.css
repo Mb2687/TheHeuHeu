@@ -26,6 +26,25 @@ body {
   line-height: 1.6;
 }
 
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  padding: 10px 14px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transform: translateY(-120%);
+  transition: transform 0.2s ease;
+  z-index: 10;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
 main {
   max-width: 840px;
   margin: 0 auto;
@@ -155,6 +174,18 @@ button, .button-link {
   text-decoration: none;
 }
 
+.launch-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 20px;
+  margin: 8px auto 0;
+  border-radius: 8px;
+  min-width: 120px;
+}
+
 button.secondary, .button-link.secondary {
   background: #fffdf6;
   color: var(--accent);
@@ -216,21 +247,6 @@ button:disabled {
   margin-bottom: 12px;
 }
 
-.badge {
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 999px;
-  font-size: 12px;
-  border: 1px solid var(--border);
-  color: var(--muted);
-  background: #fff;
-}
-
-.badge.ready {
-  border-color: #7d9a6d;
-  background: #e4f0df;
-  color: #35512c;
-}
 
 footer {
   border-top: 2px solid var(--border);

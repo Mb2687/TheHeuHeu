@@ -1213,7 +1213,8 @@
 
       const section = document.getElementById(targetId);
       if (section) {
-        section.scrollIntoView({ behavior: "smooth", block: "start" });
+        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        section.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "start" });
         history.replaceState(null, "", `#${targetId}`);
       }
     });

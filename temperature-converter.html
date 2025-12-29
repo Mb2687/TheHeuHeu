@@ -9,6 +9,7 @@
   <script defer src="script.js"></script>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
   <header>
     <div class="wrap">
       <a href="index.html" class="brand">theheuheu.com</a>
@@ -19,7 +20,7 @@
     </div>
   </header>
 
-  <main>
+  <main id="main-content">
     <section class="tool-card">
       <h1>Temperature Converter</h1>
       <p>Convert values between Fahrenheit, Celsius, Kelvin, and Rankine.</p>
@@ -37,13 +38,12 @@
 
       <div id="temp-status" class="status" role="status" aria-live="polite"></div>
 
-      <div id="temp-output" class="output-list" aria-live="polite"></div>
+      <div id="temp-output" class="output-list"></div>
     </section>
   </main>
 
   <footer>
     <span>© 2025 The Heuheu. All rights reserved.</span>
-</div>
 </footer>
 </body>
 </html>
