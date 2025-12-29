@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Unicode Symbols – theheuheu</title>
-  <meta name="description" content="Browse and copy common Unicode symbols with keyboard shortcuts.">
+  <title>UTF-8 Character Copier – theheuheu</title>
+  <meta name="description" content="Search and copy common UTF-8 characters and symbols with keyboard shortcuts.">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
   <script defer src="script.js"></script>
@@ -11,7 +11,7 @@
 <body>
   <header>
     <div class="wrap">
-      <a href="index.html" class="brand">theheuheu.com</a>
+      <a href="index.html">theheuheu.com</a>
       <nav aria-label="Primary">
         <a href="tools.html">Tools</a>
         <a href="about.html">About</a>
@@ -21,8 +21,8 @@
 
   <main>
     <section class="tool-card">
-      <h1>Unicode Symbols</h1>
-      <p>Browse symbols, copy them quickly, and use your OS shortcut for more options.</p>
+      <h1>UTF-8 Character Copier</h1>
+      <p>Search for a symbol, click to copy, and use your OS shortcut for more options.</p>
 
       <div class="shortcut-grid">
         <div class="shortcut-card">
@@ -41,10 +41,10 @@
 
       <label class="range-row" for="utf-scope">Character set</label>
       <select id="utf-scope" class="select-input">
-        <option value="math">Common math symbols</option>
-        <option value="currency">Common currency symbols</option>
-        <option value="language">Common language symbols</option>
-        <option value="technical">Common technical symbols</option>
+        <option value="math">Math symbols</option>
+        <option value="currency">Currency symbols</option>
+        <option value="language">Language symbols</option>
+        <option value="technical">Technical symbols</option>
         <option value="greek">Greek symbols</option>
       </select>
 
@@ -53,7 +53,7 @@
           <span id="utf-selected" class="utf-selected" aria-live="polite">Select a character</span>
           <span id="utf-selected-code" class="utf-code"></span>
         </div>
-        <button id="utf-copy-button" class="button-link secondary utf-copy-button" type="button">Copy Selected</button>
+        <button id="utf-copy-button" class="button-link secondary" type="button">Copy Selected</button>
       </div>
 
       <div id="utf-list" class="utf-grid" role="list"></div>
@@ -62,8 +62,8 @@
   </main>
 
   <footer>
-    <span>© 2025 The Heuheu. All rights reserved.</span>
-</div>
-</footer>
+    <a href="index.html">Home</a>
+    <a href="tools.html">Tools</a>
+  </footer>
 </body>
 </html>
