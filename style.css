@@ -103,6 +103,7 @@ p {
   box-shadow: 0 10px 24px var(--shadow);
 }
 
+
 .upload-area {
   border: 2px dashed var(--border);
   padding: 24px;
