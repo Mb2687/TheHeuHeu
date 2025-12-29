@@ -54,6 +54,21 @@ header a {
   font-weight: 600;
 }
 
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid #a4845a;
+  object-fit: cover;
+  background: transparent;
+}
+
 nav {
   display: flex;
   gap: 16px;
@@ -220,6 +235,7 @@ footer a {
   margin: 0 8px;
 }
 
+
 .hero {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -229,6 +245,11 @@ footer a {
 
 .hero-copy p {
   font-size: 18px;
+}
+
+.greeting {
+  font-size: 18px;
+  margin: 0;
 }
 
 .category-grid {
@@ -264,6 +285,7 @@ footer a {
   display: grid;
   gap: 10px;
   justify-items: center;
+  position: relative;
 }
 
 .drawer-image {
@@ -275,6 +297,11 @@ footer a {
   background: #e7d2b3;
   object-fit: contain;
 }
+
+.drawer-link {
+  display: inline-block;
+}
+
 
 .drawer-label {
   font-size: 14px;
@@ -355,6 +382,17 @@ footer a {
   z-index: 1;
 }
 
+.tools-jump {
+  position: sticky;
+  top: 12px;
+  z-index: 1;
+  background: var(--paper);
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+
 .utf-copy-button {
   position: relative;
 }
@@ -431,6 +469,20 @@ footer a {
   font-size: 14px;
 }
 
+@media (max-width: 900px) {
+  main {
+    padding: 32px 18px 48px;
+  }
+
+  header .wrap {
+    padding: 14px 18px;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 640px) {
   header .wrap {
     flex-direction: column;
@@ -441,12 +493,20 @@ footer a {
     font-size: 26px;
   }
 
-  .hero {
-    grid-template-columns: 1fr;
-  }
-
   .hero-copy p {
     font-size: 16px;
+  }
+
+  main {
+    padding: 28px 16px 44px;
+  }
+
+  .drawer-image {
+    max-height: 240px;
+  }
+
+  .category-grid {
+    grid-template-columns: 1fr;
   }
 
   .output-item {
@@ -457,5 +517,25 @@ footer a {
   .utf-actions {
     flex-direction: column;
     align-items: flex-start;
+    top: 8px;
+  }
+}
+
+@media (max-width: 420px) {
+  h1 {
+    font-size: 24px;
+  }
+
+  .tool-card {
+    padding: 18px;
+  }
+
+  .drawer-image {
+    max-height: 200px;
+  }
+
+  button, .button-link {
+    width: 100%;
+    text-align: center;
   }
 }

@@ -10,7 +10,7 @@
 <body>
   <header>
     <div class="wrap">
-      <a href="index.html">theheuheu.com</a>
+      <a href="index.html" class="brand">theheuheu.com</a>
       <nav aria-label="Primary">
         <a href="tools.html">Tools</a>
         <a href="about.html">About</a>
@@ -22,32 +22,22 @@
     <section class="hero">
       <div class="hero-copy">
         <h1>Free Online Tools</h1>
-        <p>The Heuheu is a junk drawer full of online tools. Pick a category and get to work.</p>
-        <div class="category-grid">
-          <a class="category-card" href="tools.html#pdf-tools">
-            <span class="category-title">PDF Tools</span>
-            <span class="category-meta">Split, convert, and organize PDFs.</span>
-          </a>
-          <a class="category-card" href="tools.html#image-tools">
-            <span class="category-title">Image Tools</span>
-            <span class="category-meta">Convert, compress, and clean up images.</span>
-          </a>
-          <a class="category-card" href="tools.html#utf-tools">
-            <span class="category-title">Unicode Symbols</span>
-            <span class="category-meta">Copy special symbols with shortcuts.</span>
-          </a>
-        </div>
+        <p id="greeting-text" class="greeting">Welcome to The Heuheu, your online tool junk drawer to get the job done.</p>
+        <p class="greeting-note">All tools are free, run locally in your browser, and are built to be privacy-friendly.</p>
       </div>
-      <div class="hero-drawer" aria-hidden="true">
-        <img class="drawer-image" src="Photos/junk-drawer.png" alt="" loading="lazy">
+      <div class="hero-drawer">
+        <a class="drawer-link" href="tools.html" aria-label="Browse tools">
+          <img class="drawer-image" src="Photos/junk-drawer.png" alt="" loading="lazy">
+        </a>
         <div class="drawer-label">Junk drawer of tools</div>
       </div>
     </section>
   </main>
 
   <footer>
-    <a href="tools.html">Tools</a>
-    <a href="about.html">About</a>
-  </footer>
+    <span>© 2025 The Heuheu. All rights reserved.</span>
+</div>
+</footer>
+  <script defer src="script.js"></script>
 </body>
 </html>

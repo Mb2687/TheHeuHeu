@@ -812,4 +812,89 @@
   };
 
   initUtf8Tool();
+  const initGreeting = () => {
+    const greeting = document.querySelector("#greeting-text");
+    if (!greeting) {
+      return;
+    }
+
+    const greetings = [
+      "Here’s a tool drawer just for you, quick fixes in a click or two.",
+      "A handy stash to see you through, small tools for a job to do.",
+      "A junk drawer vibe, but tidy too, pick a tool and follow through.",
+      "Quick helpers here, a trusty crew, a tool or two to finish through.",
+      "Need a quick fix? We’ve got a few, tools to help you see it through.",
+      "For tiny tasks and bigger too, a helpful drawer made just for you.",
+      "A grab‑and‑go stash, simple and true, tools to get the job done, too.",
+      "Tools on deck for what you do, a steady helper, just for you.",
+      "A neat little drawer you can peruse, fast tools for whatever you choose.",
+      "A tidy shelf of helpers, not a zoo, quick tools when time is blue.",
+      "A simple place to search and do, a tool or two to see you through.",
+      "The tools are here, ready for you, quick tasks made easy to pursue.",
+      "A small‑but‑mighty helper crew, a tool for every little to‑do.",
+      "A pocket drawer for what you do, fast tools to get you through.",
+      "When you need a tool or two, we keep them handy just for you.",
+      "A clean, calm drawer of helpers too, the quick tool you need to do.",
+      "A handy nook for tasks in queue, choose a tool and follow through.",
+      "A tiny toolkit in open view, for quick fixes when you need them, too.",
+      "The job feels light with tools in view, a steady helper just for you.",
+      "A no‑fuss drawer to see you through, pick a tool and start anew.",
+      "Fast tools for tasks you need to do, simple helpers, tried and true.",
+      "A tidy drawer with a helpful hue, quick tools to get you through.",
+      "When work is small or work is due, a tool or two to get you through.",
+      "A quick‑fix nook, a helper crew, the tool you need might be for you.",
+      "A little drawer with tools that do, quick tasks made easy to pursue.",
+      "A friendly stash of helpers too, for the job that calls on you.",
+      "A simple set for tasks in view, a tool to see the job right through.",
+      "A tidy pick for things to do, quick tools for a clean breakthrough.",
+      "A handy drawer of tools to use, for work that needs a nudge or two.",
+      "A quick stop shop for what you do, tools that help you follow through.",
+      "A small but smart helper crew, for tasks you need to see right through.",
+      "A neat tool stash for me and you, ready when you need a tool or two.",
+      "A clean, quick drawer for stuff to do, tools that keep your pace in tune.",
+      "A helpful drawer to keep things true, for tasks you want to see right through.",
+      "A gentle nudge with tools in view, quick helpers made just for you.",
+      "A toolbox feel, a drawer‑like view, to help you get the work right through.",
+      "A handy aisle of tools to choose, for quick fixes you can use.",
+      "A neat little shelf of helpers too, to get the job done, start to finish through.",
+      "A place for tools that carry you, through little tasks and bigger too.",
+      "A calm, clean drawer of helpers true, ready for the thing you need to do.",
+      "A bright little drawer of helpers too, pick a tool and see it through.",
+      "A quick‑grab stash for what you do, a tool for every small to‑do.",
+      "A tidy tool stop just for you, quick helpers in a click or two.",
+      "A tool‑packed drawer, steady and true, built for tasks you have to do.",
+      "A helpful spot for tasks in queue, pick a tool and see it through.",
+      "A small but strong helper crew, for tasks that need a tool or two.",
+      "A no‑frills drawer, a helper too, quick tools to help you follow through.",
+      "A smart little drawer to get you through, the tool you need might be in view.",
+      "A quick‑fix drawer with helpers too, for tasks that need a tool or two.",
+      "A practical drawer with tools in view, ready when you need a quick breakthrough.",
+    ];
+
+    const index = Math.floor(Math.random() * greetings.length);
+    greeting.textContent = `Welcome to The Heuheu! ${greetings[index]}`;
+  };
+
+  initGreeting();
+  const initToolsCategorySelect = () => {
+    const select = document.querySelector("#tools-category-select");
+    if (!select) {
+      return;
+    }
+
+    select.addEventListener("change", () => {
+      const targetId = select.value;
+      if (!targetId) {
+        return;
+      }
+
+      const section = document.getElementById(targetId);
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
+        history.replaceState(null, "", `#${targetId}`);
+      }
+    });
+  };
+
+  initToolsCategorySelect();
 })();
